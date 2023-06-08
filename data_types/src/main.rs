@@ -1,3 +1,5 @@
+use std::io;
+
 fn main() {
 
     //Integers and mathmatics:
@@ -78,4 +80,25 @@ fn main() {
     let fill_array = [0 /*array will fill with 0's */; 5/*number of elements */];
 
     println!("{} {}, {}{}{}{}", months[0],define_array[0],my_array[1],fill_array[4],define_array[1],my_array[2]);
+
+    println!("Please enter an array index:");
+
+    let mut index = String::new();
+
+    io::stdin()
+        .read_line(&mut index)
+        .expect("Failed to read line");
+
+    let index: usize = index
+        .trim()
+        .parse()
+        .expect("Index entered was not a number.");
+
+
+    if index < my_array.len() {
+        let element = my_array[index];
+        println!("The value of the element at index {index} is: {element}");
+    } else {
+        println!("That index is not available in this array!");
+    }
 }
