@@ -15,4 +15,10 @@ fn main() {
     }
 
     println!("The value of x is: {x}");
+
+    //Shadowing example - a immutable variable can be changed to a different value or type without the mut keyword
+    let spaces = "    ";  
+    let spaces = spaces.len();  //Equivalent to .length() string method in JavaScript
+
+    println!("The number of spaces is {spaces}");
 }
