@@ -35,4 +35,4 @@ fn six() -> i8 {
 
 fn plus_one(number: i8) -> i8 {
     number + 1
-} 
+}
