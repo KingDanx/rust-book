@@ -3,7 +3,7 @@ fn main() {
     let s1 = String::from("hello");
     let mut s2 = s1.clone();
     let s3 = gives_ownership();
-    let s4 = takes_and_gives_back(gives_ownership());
+    let mut s4 = takes_and_gives_back(gives_ownership());
 
     s2.push_str(" world");
 
@@ -12,8 +12,17 @@ fn main() {
     ownership();
 
     println!("{} - {}", s4, reference_string_len(&s4));
-    change_ref_string(&mut String::from(&s4));
+    change_ref_string(&mut s4);
+    {
+        let r1 = &mut s4;
+        r1.push_str(" cat?");
+    }
+    let r2 = &mut s4;
+
+
+    r2.push_str(" car#");
     println!("{:?}", string_len(s4));
+    
 
 
 }
@@ -29,7 +38,7 @@ fn ownership() {
 
     take_int(x);
 
-    println!("ownership: {x}");
+    println!("ownership: {x}");  //this doesn't throw an error because numbers can be easily copied on the stack
 
 }
 
