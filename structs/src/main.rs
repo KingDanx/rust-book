@@ -11,6 +11,27 @@ struct Rectangle {
     height: u32,
 }
 
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn half_area(&self) -> u32 {
+        self.width * self.height / 2
+    }
+
+    fn can_hold(&self, rect: &Rectangle) -> bool {
+        self.width > rect.width && self.height > rect.height
+    }
+
+    fn square(size: u32) -> Self {
+        Self {
+            height: size,
+            width: size,
+        }
+    }
+}
+
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
@@ -75,11 +96,18 @@ fn main() {
         width: 50,
     };
 
+    let rectangle4 = Rectangle::square(3);
+
     dbg!(&rectangle3);
 
     println!("The area of rectangle 1 is {} square pixles.", area(width1, length1));
     println!("The area of rectangle 1 is {} square pixles.", area_tuple(dimensions));
     println!("The area of rectangle 1 is {} square pixles.", area_struct(&rectangle2));
+    println!("The area of rectangle 1 is {} square pixles. Method", rectangle2.area());
+    println!("The area of rectangle 1 is {} square pixles. Method half", rectangle2.half_area());
+    println!("Rectangle 3 can fit inside of Rectangle 2: {}", rectangle3.can_hold(&rectangle2));
+    println!("Rectangle 2 can fit inside of Rectangle 3: {}", rectangle2.can_hold(&rectangle3));
+    println!("Rectangle 4 can fit inside of Rectangle 2: {}", rectangle2.can_hold(&rectangle4));
     println!("{:#?}", rectangle2);
     dbg!("{:#?}", &rectangle2);
 }
