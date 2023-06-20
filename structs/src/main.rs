@@ -5,6 +5,12 @@ struct User {
     sign_in_count: u64
 }
 
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
@@ -51,6 +57,31 @@ fn main() {
     println!("{}", user2.email);
     println!("{}", user3.email);
     println!("{}", user4.email);
+
+    let width1 = 30;
+    let length1 = 50;
+
+    let dimensions = (20, 50);
+
+    let rectangle2 = Rectangle {
+        height: 40,
+        width: 35,
+    };
+
+    let scale = 2;
+
+    let rectangle3 = Rectangle {
+        height: dbg!(30 * scale),
+        width: 50,
+    };
+
+    dbg!(&rectangle3);
+
+    println!("The area of rectangle 1 is {} square pixles.", area(width1, length1));
+    println!("The area of rectangle 1 is {} square pixles.", area_tuple(dimensions));
+    println!("The area of rectangle 1 is {} square pixles.", area_struct(&rectangle2));
+    println!("{:#?}", rectangle2);
+    dbg!("{:#?}", &rectangle2);
 }
 
 fn build_user(email: String, username: String) -> User {
@@ -60,4 +91,16 @@ fn build_user(email: String, username: String) -> User {
         email,
         sign_in_count: 1,
     }
+}
+
+fn area(width: u32, length: u32) -> u32 {
+    width * length
+}
+
+fn area_tuple(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
+}
+
+fn area_struct(rectangle: &Rectangle) -> u32 {
+    rectangle.height * rectangle.width
 }
