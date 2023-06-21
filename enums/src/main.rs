@@ -130,6 +130,17 @@ fn main() {
         7 => remove_fancy_hat(),
         _ => (), //Do nothing, I guess the same as just saying return?
     }
+
+    let config_max = Some(3u8);
+    match config_max {
+        Some(max) => println!("The maximum is configured to be {}", max),
+        _ => (),
+    }
+
+    //Alternate for the above code
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {}", max);
+    }
 }
 
 fn plus_one(x: Option<i32>) -> Option<i32> {
