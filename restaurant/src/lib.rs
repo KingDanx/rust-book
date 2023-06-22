@@ -15,6 +15,8 @@ mod tests {
 
 fn deliver_order() {}
 
+
+mod front_of_house; // this needs to be here so rust can go find the file with this name.
 // use crate::front_of_house::hosting; //essetially pulls hosting to the crate root.
 use crate::front_of_house::hosting as dog; //essetially pulls hosting to the crate root and names it differently.
 pub use crate::front_of_house::hosting as pubHost; //I think allows for this to be used in something outside the module.  The doc was very vauge and showed no example.
@@ -22,22 +24,6 @@ use crate::front_of_house::hosting::{self, add_to_waitlist}; //allows you to imp
 // use crate::front_of_house::{self, serving}; //allows you to import multiple modules from the same parent module.
 use crate::back_of_house::*; //brings all public items into scope
 
-
-mod front_of_house {
-    pub mod hosting {
-       pub fn add_to_waitlist() {}
-
-        fn seat_at_table() {}
-    }
-
-    pub mod serving {
-        fn take_order() {}
-
-        fn serve_order() {}
-
-        fn take_payment() {}
-    }
-}
 
 pub fn eat_at_restaurant() {
 
@@ -73,7 +59,7 @@ mod back_of_house {
         pub fn summer(toast: &str) -> Breakfast {
             Breakfast { 
                 toast: String::from(toast), 
-                seasonal_fruits: String::from("peaches") ,
+                seasonal_fruits: String::from("peaches"),
             }
         }
     }
