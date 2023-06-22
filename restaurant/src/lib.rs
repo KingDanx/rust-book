@@ -15,6 +15,14 @@ mod tests {
 
 fn deliver_order() {}
 
+// use crate::front_of_house::hosting; //essetially pulls hosting to the crate root.
+use crate::front_of_house::hosting as dog; //essetially pulls hosting to the crate root and names it differently.
+pub use crate::front_of_house::hosting as pubHost; //I think allows for this to be used in something outside the module.  The doc was very vauge and showed no example.
+use crate::front_of_house::hosting::{self, add_to_waitlist}; //allows you to import multiple modules from the same parent module and include that module
+// use crate::front_of_house::{self, serving}; //allows you to import multiple modules from the same parent module.
+use crate::back_of_house::*; //brings all public items into scope
+
+
 mod front_of_house {
     pub mod hosting {
        pub fn add_to_waitlist() {}
@@ -22,7 +30,7 @@ mod front_of_house {
         fn seat_at_table() {}
     }
 
-    mod serving {
+    pub mod serving {
         fn take_order() {}
 
         fn serve_order() {}
@@ -32,20 +40,22 @@ mod front_of_house {
 }
 
 pub fn eat_at_restaurant() {
-    //Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
 
-    //Realative path
-    front_of_house::hosting::add_to_waitlist();
+    dog::add_to_waitlist();
+
+    hosting::add_to_waitlist();
+
+    pubHost::add_to_waitlist();
 
     let mut meal = back_of_house::Breakfast::summer("Rye");
+    let mut meal2 = Breakfast::summer("Rye");
 
     meal.toast = String::from("Wheat");
 
     println!("I'd like {} toast please", meal.toast);
 
-    let order1 = back_of_house::Appetizer::Soup;
-    let order2 = back_of_house::Appetizer::Salad;
+    let order1 = Appetizer::Soup;
+    let order2 = Appetizer::Salad;
 }
 
 mod back_of_house {
