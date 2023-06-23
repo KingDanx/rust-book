@@ -1,3 +1,11 @@
+#[derive(Debug)]
+enum SpreadsheetCell {
+    Int(i32),
+    Float(f64),
+    Text(String),
+}
+
+
 fn main() {
     let v: Vec<i32> = Vec::new(); //defining an empty vector, needs a type assignment Vec<T>
     println!("{:#?}", v);
@@ -45,6 +53,32 @@ fn main() {
         *i *= 20;
         println!("{i}");
     }
+    
+    let first = v[0]; 
+
+    // let first = &v[0]; //this is an immutable borrow
+    v.push(6); //The code won't compile because the immutable reference's memeory location could have changed as a result of adding a value to the vector so it has become invalidated. 
+
+    println!("The first element is {first}"); 
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Float(10.5),
+        SpreadsheetCell::Text(String::from("blue")),
+    ];
+    
+    println!("{:?}", row);
+
+    for i in &row {
+        match i {
+            SpreadsheetCell::Int(x) => println!("{x}"),
+            SpreadsheetCell::Float(x) => println!("{x}"),
+            SpreadsheetCell::Text(x)=> println!("{x}"),
+            _ => println!("Not the droid you're looking for."),
+        }
+    }
+
+
 }
 
 fn take_num(x: i32) {
