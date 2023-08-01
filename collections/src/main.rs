@@ -56,7 +56,7 @@ fn main() {
     
     let first = v[0]; 
 
-    // let first = &v[0]; //this is an immutable borrow
+    // let first = &v[0]; //this is an immutable borrowed reference.
     v.push(6); //The code won't compile because the immutable reference's memeory location could have changed as a result of adding a value to the vector so it has become invalidated. 
 
     println!("The first element is {first}"); 
@@ -66,18 +66,52 @@ fn main() {
         SpreadsheetCell::Float(10.5),
         SpreadsheetCell::Text(String::from("blue")),
     ];
-    
+
     println!("{:?}", row);
 
     for i in &row {
         match i {
-            SpreadsheetCell::Int(x) => println!("{x}"),
-            SpreadsheetCell::Float(x) => println!("{x}"),
-            SpreadsheetCell::Text(x)=> println!("{x}"),
-            _ => println!("Not the droid you're looking for."),
+            SpreadsheetCell::Int(x) => println!("Found int in enum vector: {x}"),
+            SpreadsheetCell::Float(x) => println!("Found float in enum vector: {x}"),
+            SpreadsheetCell::Text(x)=> println!("Found text in enum vector: {x}"),
         }
     }
 
+    let mut s = String::new();
+
+    println!("{s}");
+
+    let data = "initial contents";
+
+    let s = data.to_string();
+
+    println!("{s}");
+    
+    let s = "secondary contents".to_string();
+    
+    println!("{s}");
+    
+    let s = String::from("tertiary contents");
+    
+    println!("{s}");
+    
+    let mut s = String::from("foo");
+    
+    s.push_str("bar");
+    
+    println!("{s}");
+    
+    let mut s1 = String::from("bar");
+    let s2 = "foo";
+    
+    s1.push_str(s2);
+
+    println!("{s1}");
+
+    let s1 = String::from("Hello, ");
+    let s2 = String::from("World!");
+    let s3 = s1 + &s2;
+    print!("{s3}");
 
 }
 
