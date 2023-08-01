@@ -77,7 +77,7 @@ fn main() {
         }
     }
 
-    let mut s = String::new();
+    let s = String::new();
 
     println!("{s}");
 
@@ -111,7 +111,32 @@ fn main() {
     let s1 = String::from("Hello, ");
     let s2 = String::from("World!");
     let s3 = s1 + &s2;
-    print!("{s3}");
+    println!("{s3}");
+
+    let s1 = String::from("tic");
+    let s2 = String::from("tac");
+    let s3 = String::from("toe");
+
+    let s = format!("{s1}-{s2}-{s3}");
+
+    println!("{s}");
+
+    let hello = String::from("hello");
+
+    let ello = &hello[1..hello.len()]; //string slice from selected index to the end of the string
+
+    println!("{ello}"); 
+
+    println!("{}", &ello[0..=0]);
+
+    //iterating over a string
+    let mut reverse_me = String::new();
+    for (index, c) in hello.chars().enumerate() {
+        reverse_me.push_str(&hello[hello.len() - (index + 1)..=hello.len() - (index+ 1)]);
+        println!("{} - {}", reverse_me, index);
+    }
+
+    
 
 }
 
