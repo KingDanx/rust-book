@@ -129,14 +129,53 @@ fn main() {
 
     println!("{}", &ello[0..=0]);
 
-    //iterating over a string
     let mut reverse_me = String::new();
+    
+    //iterating over a string
     for (index, c) in hello.chars().enumerate() {
         reverse_me.push_str(&hello[hello.len() - (index + 1)..=hello.len() - (index+ 1)]);
         println!("{} - {}", reverse_me, index);
     }
 
+    //Hash maps
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Red");
+
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value);
+
+    //println!("{field_name}"); //does not work because the HashMap has taken ownership
+
+    map.insert(String::from("Favorite color"), String::from("Blue")); //this value will overwrite the previous key with the same name
+
+    println!("{:?}", map);
+
+    scores.entry(String::from("Red")).or_insert(50);
+
+    println!("{:?}", map.entry(String::from("Favorite color")));
+    println!("{:?}", scores);
     
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0);  //or_insert returns a mutable reference to the value of the key.
+        *count += 1; //dereference the value wiht * so we can manipulate it
+    }
+
+    println!("{:?}", map);
 
 }
 
