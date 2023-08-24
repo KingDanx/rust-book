@@ -20,6 +20,12 @@ impl <T, U> MultiPoint<T, U> {
     fn x(&self) -> &T {
         &self.x
     }    
+    fn mixup<T2, U2>(self, other: MultiPoint<T2, U2>) -> MultiPoint<T, U2> {
+        MultiPoint { 
+            x: self.x, 
+            y: other.y 
+        }
+    }
 }
 
 
@@ -62,6 +68,17 @@ fn main() {
     println!("{:?}", multi_point);
     println!("{:?}", multi_point.x());
     println!("{:?}", integer_point.x());
+    
+    let  multi_point2 = MultiPoint {
+        x: "dog",
+        y: String::from("cat"),
+    };
+    
+    println!("{:?}", multi_point2);
+    
+    let multi_point3 = multi_point2.mixup(multi_point);
+    println!("{:?}", multi_point3);
+    
 
 }
 
