@@ -28,6 +28,35 @@ impl <T, U> MultiPoint<T, U> {
     }
 }
 
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
 
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
@@ -79,6 +108,23 @@ fn main() {
     let multi_point3 = multi_point2.mixup(multi_point);
     println!("{:?}", multi_point3);
     
+    let my_articile = NewsArticle {
+        headline: String::from("DANGER"),
+        location: String::from("Germany"),
+        author: String::from("R.L. Stien"),
+        content: String::from("Are you feeling SHLAPPY?!"),
+    };
+
+    println!("{}", my_articile.summarize());
+
+    let my_tweet = Tweet {
+        username: String::from("KingDanx"),
+        content: String::from("I'm feeling SHLAPPY!"),
+        reply: true,
+        retweet: false,
+    };
+
+    println!("{}", my_tweet.summarize());
 
 }
 
