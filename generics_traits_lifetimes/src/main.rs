@@ -28,9 +28,21 @@ impl <T, U> MultiPoint<T, U> {
     }
 }
 
+// pub trait Summary {
+//     fn summarize(&self) -> String; //? If there is no default like this you will need to handle it in every impl
+// }
 pub trait Summary {
-    fn summarize(&self) -> String;
+    fn summarize_author(&self) -> String { 
+        String::from("No author")
+    }
+
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
 }
+
+impl <T, U> Summary for MultiPoint<T, U> {} //?empty block for default trait
+
 pub struct NewsArticle {
     pub headline: String,
     pub location: String,
@@ -52,6 +64,9 @@ pub struct Tweet {
 }
 
 impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
+        format!("{}", self.username)
+    }
     fn summarize(&self) -> String {
         format!("{}: {}", self.username, self.content)
     }
@@ -125,6 +140,14 @@ fn main() {
     };
 
     println!("{}", my_tweet.summarize());
+    println!("{}", my_tweet.summarize_author());
+    println!("{}", multi_point3.summarize());
+
+    notify(&my_articile);
+
+    let new = returns_summarizable();
+
+    // println!("{:?}", new);
 
 }
 
@@ -162,4 +185,19 @@ fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     }
 
     largest
+}
+
+pub fn notify(item: &impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+fn returns_summarizable() -> impl Summary {
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        retweet: false,
+    }
 }
