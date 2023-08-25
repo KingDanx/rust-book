@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(Debug)]
 struct Point<T> {
     x: T,
@@ -72,6 +74,27 @@ impl Summary for Tweet {
     }
 }
 
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+
 
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
@@ -142,12 +165,18 @@ fn main() {
     println!("{}", my_tweet.summarize());
     println!("{}", my_tweet.summarize_author());
     println!("{}", multi_point3.summarize());
-
+    
     notify(&my_articile);
-
+    
     let new = returns_summarizable();
+    
+    println!("{}", new.summarize());
 
-    // println!("{:?}", new);
+    let pair = Pair::new(1, 2);
+    let pair2 = Pair::new(2.1, 2.2);
+
+    pair.cmp_display();
+    pair2.cmp_display();
 
 }
 
