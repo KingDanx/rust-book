@@ -1,5 +1,6 @@
 use std::env;
 use std::fs;
+use std::process;
 
 #[derive(Debug)]
 struct Config {
@@ -15,8 +16,10 @@ impl Config {
         }
     }
 
-    fn extract_file_text(self) -> String {
-        fs::read_to_string(self.file_path).expect("why no poem?")
+    fn extract_file_text(self) -> String {        
+        fs::read_to_string(self.file_path).unwrap_or_else(|err| {  //returns the value or the error
+            format!("Problem parsing arguments: {err}") //format the error into a string and return on error
+        })
     }
 
     fn build(args: &[String]) -> Result<Config, &'static str> {
@@ -32,26 +35,22 @@ impl Config {
 
 fn main() {
     let args: Vec<String> = env::args().collect(); 
-    dbg!(&args);
-
-    // if args.len() < 3 {
-    //     panic!("Error: Please provide arguments for -- [search criteria] [file name]");
-    // }
-
-    // let config = parse_config(&args);
-    
-    
-    
-    let config = Config::build(&args);
-        
-    match config {
-        Ok(d) => println!("{:?}", d.extract_file_text()),
-        Err(e) => println!("{}", e),
-    }    
-    // println!("{:?}", config);
-    // println!("{}", config.extract_file_text());
+    // dbg!(&args);    
+    run(&args);
 }
 
-// fn parse_config(args: &[String]) -> Config {
-//     Config::new(args[1].clone(), args[2].clone())
-// }
+fn run(args: &[String]) {
+    let config = Config::build(args);
+        
+    let contents = match config {
+        Ok(d) => {
+            println!("Searching for {} in {}", d.query, d.file_path);
+            d
+        },
+        Err(e) => {
+            println!("Problem parsing the arguments: {}", e);
+            process::exit(1);
+        },
+    };
+    println!("{}", contents.extract_file_text());
+}
