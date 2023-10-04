@@ -2,7 +2,7 @@ use std::fs;
 use std::process;
 
 #[derive(Debug)]
-struct Config {
+pub struct Config {
     pub query: String,
     pub file_path: String,
 }
@@ -15,9 +15,10 @@ impl Config {
         }
     }
 
-    pub fn extract_file_text(self) -> String {        
-        fs::read_to_string(self.file_path).unwrap_or_else(|err| {  //returns the value or the error
-            format!("Problem extracting file text: {err}") //format the error into a string and return on error
+    pub fn extract_file_text(&self) -> String {        
+        fs::read_to_string(&self.file_path).unwrap_or_else(|err| {  //returns the value or the error
+            println!("{}", format!("Problem extracting text from file {}: {err}", &self.file_path));
+            process::exit(1); //format the error into a string and return on error
         })
     }
 
@@ -31,12 +32,13 @@ impl Config {
     }
 }
 
-pub fn run(args: &[String]) {
+pub fn run(args: &[String]) -> Config {
     let config = Config::build(args);
         
     let contents = match config {
         Ok(d) => {
             println!("Searching for {} in {}", d.query, d.file_path);
+            // println!("{}", d.extract_file_text());
             d
         },
         Err(e) => {
@@ -44,5 +46,36 @@ pub fn run(args: &[String]) {
             process::exit(1);
         },
     };
-    println!("{}", contents.extract_file_text());
+    contents
+}
+
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line.trim());
+        }
+    }
+    if results.len() == 0 {
+        println!("No results found");
+    } else {
+        println!("{:#?}", results);
+    }
+    results
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "duct";
+        let contents = "\
+            Rust:
+            safe, fast, productive.
+            Pick three.";
+
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+    }
 }
