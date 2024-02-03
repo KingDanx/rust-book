@@ -11,8 +11,14 @@ pub struct Config {
 
 impl Config {
     pub fn new(query: String, file_path: String) -> Config {
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
-        Config { 
+        let ignore_case: bool = match env::var("IGNORE_CASE") {
+            Ok(val) => string_to_bool(&val),
+            Err(_) => false
+        };
+
+        println!("{ignore_case}");
+
+        Config {
             query,
             file_path,
             ignore_case,
@@ -91,6 +97,14 @@ pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a st
         println!("{:#?}", results);
     }
     results
+}
+
+fn string_to_bool(string: &str) -> bool {
+    let result: bool = match string.to_lowercase().trim() {
+        "true" | "1" | "yes" => true,
+        _ => false,
+    };
+    result
 }
 
 #[cfg(test)]
