@@ -27,7 +27,9 @@ impl Inventory {
     fn most_stocked(&mut self) -> ShirtColor {
         let mut rng = rand::thread_rng();
 
-        //? Sort by stock, multiply by -1 to get the highest value in the 0 index.
+        //? .iter() allows me to iterate over the vector.
+        //? max_by_key allows me to find the max value by a givin value that all elements share
+        //? it should return a single value as an option Some() or none.  The highest_stock is set to the Some() value if found or 0 if error
         let highest_stock = self.shirts.iter().max_by_key(|s| s.stock).map(|s| s.stock).unwrap_or(0);
 
         //? How to do a filter in rust. Since self.shirts is now reverse sorted I can take the first element and return 
