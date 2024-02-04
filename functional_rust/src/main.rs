@@ -1,14 +1,16 @@
 use std::thread;
+use rand::Rng;
 
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
-    Blue
+    Blue,
+    Purple
 }
 
 #[derive(Debug)]
 struct Shirt {
-    stock: u32,
+    stock: i32,
     color: ShirtColor,
 }
 
@@ -18,24 +20,23 @@ struct Inventory {
 }
 
 impl Inventory {
-    fn give_away(&self, customer_preference: Option<ShirtColor>) -> ShirtColor {
+    fn give_away(&mut self, customer_preference: Option<ShirtColor>) -> ShirtColor {
         customer_preference.unwrap_or_else(|| self.most_stocked())
     }
 
-    fn most_stocked(&self) -> ShirtColor {
-        let mut max = 0;
+    fn most_stocked(&mut self) -> ShirtColor {
+        let mut rng = rand::thread_rng();
 
-        for shirt in &self.shirts {
-            if shirt.stock > max {
-                max = shirt.stock
-            }
-        }    
+        //? Sort by stock, multiply by -1 to get the highest value in the 0 index.
+        let highest_stock = self.shirts.iter().max_by_key(|s| s.stock).map(|s| s.stock).unwrap_or(0);
 
-        let most_stocked = self.shirts.iter().find(|el| el.stock == max);
+        //? How to do a filter in rust. Since self.shirts is now reverse sorted I can take the first element and return 
+        //? a Vec<_> of shirts that have the same stock as the most stocked
+        let multiples: Vec<_> = self.shirts.iter().filter(|shirt| shirt.stock == highest_stock).collect();
+        // println!("Multiples {:#?}", multiples);
 
-        let shirt = most_stocked.unwrap_or(&Shirt {color: ShirtColor::Blue, stock: 0});
-
-        shirt.color
+        //? Return a random shirt from the multiples Vec<&Shirt>
+        multiples[rng.gen_range(0..self.shirts.len() - 1)].color
     }
 }
 
@@ -52,8 +53,13 @@ fn main() {
         color: ShirtColor::Blue,
     };
 
-    let store = Inventory {
-        shirts: vec![blue_shirts, red_shirts],
+    let purple_shirts = Shirt {
+        stock: 200,
+        color: ShirtColor::Purple,
+    };
+
+    let mut store = Inventory {
+        shirts: vec![red_shirts, blue_shirts, purple_shirts],
     };
 
     println!("{:#?}", store);
@@ -69,9 +75,9 @@ fn main() {
 
     println!("{:#?}", give_away2);
 
-    test_closure_borrow();
+    // test_closure_borrow();
 
-    test_closure_borrow_thread();
+    // test_closure_borrow_thread();
 }
 
 fn test_closure_borrow() {
