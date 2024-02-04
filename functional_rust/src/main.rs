@@ -34,7 +34,7 @@ impl Inventory {
         //? a Vec<_> of shirts that have the same stock as the most stocked
         let multiples: Vec<_> = self.shirts.iter().filter(|shirt| shirt.stock == highest_stock).collect();
         // println!("Multiples {:#?}", multiples);
-
+        //test
         //? Return a random shirt from the multiples Vec<&Shirt>
         multiples[rng.gen_range(0..self.shirts.len() - 1)].color
     }
