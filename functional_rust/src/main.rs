@@ -1,3 +1,5 @@
+use std::thread;
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
@@ -14,6 +16,29 @@ struct Shirt {
 struct Inventory {
     shirts: Vec<Shirt>,
 }
+
+impl Inventory {
+    fn give_away(&self, customer_preference: Option<ShirtColor>) -> ShirtColor {
+        customer_preference.unwrap_or_else(|| self.most_stocked())
+    }
+
+    fn most_stocked(&self) -> ShirtColor {
+        let mut max = 0;
+
+        for shirt in &self.shirts {
+            if shirt.stock > max {
+                max = shirt.stock
+            }
+        }    
+
+        let most_stocked = self.shirts.iter().find(|el| el.stock == max);
+
+        let shirt = most_stocked.unwrap_or(&Shirt {color: ShirtColor::Blue, stock: 0});
+
+        shirt.color
+    }
+}
+
 
 fn main() {
     println!("functional rust");
@@ -43,26 +68,49 @@ fn main() {
     let give_away2 = store.give_away(winner2);
 
     println!("{:#?}", give_away2);
+
+    test_closure_borrow();
+
+    test_closure_borrow_thread();
 }
 
-impl Inventory {
-    fn give_away(&self, customer_preference: Option<ShirtColor>) -> ShirtColor {
-        customer_preference.unwrap_or_else(|| self.most_stocked())
-    }
+fn test_closure_borrow() {
+    let mut dog = String::from("Dog");
+    
+    println!("{dog}");
+    
+    let mut print_dog = || {
+        println!("{dog}");
+        dog = format!("{dog} cat")
+    };
 
-    fn most_stocked(&self) -> ShirtColor {
-        let mut max = 0;
+    print_dog();
+    print_dog();
+    print_dog();
+    println!("{dog}");
+}
 
-        for shirt in &self.shirts {
-            if shirt.stock > max {
-                max = shirt.stock
+fn test_closure_borrow_thread() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    let one_thousand = |thread: &str| {
+        let mut count = 0;
+        loop {
+            if count <= 1000 {
+                println!("{thread}: {count}");
+                count += 1;
+            } else {
+                break;
             }
-        }    
+        }
+    };
 
-        let most_stocked = self.shirts.iter().find(|el| el.stock == max);
+    let spawned = thread::spawn(move || one_thousand("Spawn"));
+    let spawned2 = thread::spawn(move || one_thousand("Spawn 2"));
+    
+    one_thousand("Main");
 
-        let shirt = most_stocked.unwrap_or(&Shirt {color: ShirtColor::Blue, stock: 0});
-
-        shirt.color
-    }
+    spawned.join().unwrap();
+    spawned2.join().unwrap();
 }
