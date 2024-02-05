@@ -80,6 +80,13 @@ fn main() {
     // test_closure_borrow();
 
     // test_closure_borrow_thread();
+
+    let shirt_iter = store.shirts.iter();
+
+    for shirt in shirt_iter {
+        println!("Got {:#?}", shirt);
+    }
+
 }
 
 fn test_closure_borrow() {
