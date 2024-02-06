@@ -9,6 +9,13 @@ enum ShirtColor {
 }
 
 #[derive(Debug)]
+struct Shoe {
+    stock: i32,
+    style: String,
+    size: f32
+}
+
+#[derive(Debug)]
 struct Shirt {
     stock: i32,
     color: ShirtColor,
@@ -17,6 +24,7 @@ struct Shirt {
 #[derive(Debug)]
 struct Inventory {
     shirts: Vec<Shirt>,
+    shoes: Vec<Shoe>,
 }
 
 impl Inventory {
@@ -40,6 +48,11 @@ impl Inventory {
         //? Return a random shirt from the multiples Vec<&Shirt>
         multiples[rng.gen_range(0..self.shirts.len() - 1)].color
     }
+
+    fn shoe_by_size(&self, size: f32) -> i32 {
+        println!("Searching for size {size} in shoe inventory");
+        self.shoes.iter().filter(|shoe| shoe.size == size).map(|shoe| shoe.stock).sum()
+    }
 }
 
 
@@ -60,8 +73,33 @@ fn main() {
         color: ShirtColor::Purple,
     };
 
+    let jordan_shoes_10_5 = Shoe {
+        stock: 4,
+        style: String::from("Jordans"),
+        size: 10.5,
+    };
+
+    let jordan_shoes_10_0 = Shoe {
+        stock: 6,
+        style: String::from("Jordans"),
+        size: 10.0,
+    };
+
+    let jordan_shoes_9_0 = Shoe {
+        stock: 8,
+        style: String::from("Jordans"),
+        size: 9.0,
+    };
+
+    let croc_shoes_9_0 = Shoe {
+        stock: 18,
+        style: String::from("Crocs"),
+        size: 9.0,
+    };
+
     let mut store = Inventory {
         shirts: vec![red_shirts, blue_shirts, purple_shirts],
+        shoes: vec![jordan_shoes_9_0, jordan_shoes_10_0, jordan_shoes_10_5, croc_shoes_9_0],
     };
 
     println!("{:#?}", store);
@@ -86,6 +124,15 @@ fn main() {
     for shirt in shirt_iter {
         println!("Got {:#?}", shirt);
     }
+
+    let size_nine = store.shoe_by_size(9.0);
+
+    println!("There are {size_nine} size nine shoes in stock");
+
+    let size_ten = store.shoe_by_size(10.0);
+
+    println!("There are {size_ten} size ten shoes in stock");
+
 
 }
 
