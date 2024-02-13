@@ -1,3 +1,4 @@
+use std::env::Args;
 use std::fs;
 use std::process;
 use std::env;
@@ -32,17 +33,26 @@ impl Config {
         })
     }
 
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("Not enough arguments");
-        }
-        let config = Config::new(args[1].clone(), args[2].clone());
+    pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        args.next();
+
+        let query = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let file_path = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a query string"),
+        };
+
+        let config = Config::new(query, file_path);
 
         Ok(config)
     }
 }
 
-pub fn run(args: &[String]) -> Config {
+pub fn run(args: Args) -> Config {
     let config = Config::build(args);
         
     let contents = match config {
